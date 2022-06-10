@@ -30,6 +30,7 @@ Author: Hana Bizhani
 Date: 06/10/2022
 """
 
+from itertools import count
 from Counter import Counter
 
 counter = Counter(3,1)
@@ -87,9 +88,6 @@ print("Equality of otherCounter and counter: ", counter == otherCounter)
 otherCounter.val = counter.val
 print("-"*5)
 print("Equality of otherCounter and counter after otherCounter.val = counter.val: ", counter == otherCounter)
-otherCounter.incr = counter.incr
-print("-"*5)
-print("Equality of otherCounter and counter after \n otherCounter.val = counter.val and otherCounter.incr = counter.incr: ", counter == otherCounter)
 
 print("-"*5)
 print("Equality of counter value with 10: ", counter == 10) 
@@ -97,6 +95,24 @@ print("Equality of counter value with 10: ", counter == 10)
 counter.val = 10
 print("-"*5)
 print("Equality of counter value with 10 after set counter value to 10: ", counter == 10) 
+print("-"*30)
+
+print("Counter value is:", counter)
+print("Counter value is:", otherCounter)
+
+#Call __ne__ magic method
+print("Equality of otherCounter and counter: ", counter != otherCounter)
+
+#Call __lt__ and __gt__ magic method
+print("Is counter < otherCounter: ", counter < otherCounter) 
+print("Is counter > otherCounter: ", counter > otherCounter) 
+
+counter = otherCounter
+print("Counter value is:", counter)
+print("Counter value is:", otherCounter)
+#Call __le__ and __ge__ magic method
+print("Is counter <= otherCounter: ", counter <= otherCounter) 
+print("Is counter >= otherCounter: ", counter >= otherCounter) 
 
 #Calling help method
 #print(help(counter))

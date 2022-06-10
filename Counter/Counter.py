@@ -89,9 +89,32 @@ class Counter:
     def __eq__(self, otherCounter) -> bool:
         print("Magic method __eq__ is called")
         if isinstance(otherCounter, Counter):
-            return self._val == otherCounter._val and self._incr == otherCounter._incr
+            return self._val == otherCounter._val
         else:
             return self._val == otherCounter
+        
+    def __ne__(self, otherCounter) -> bool:
+        print("Magic method __ne__ is called")
+        return not self.__eq__(otherCounter)
+    
+    def __lt__(self, otherCounter) -> bool:
+        print("Magic method __lt__ is called")
+        if isinstance(otherCounter, Counter):
+            return self._val < otherCounter._val
+        else:
+            return self._val < otherCounter
+        
+    def __gt__(self, otherCounter) -> bool:
+        print("Magic method __gt__ is called")
+        return not (self.__lt__(otherCounter) and self.__eq__(otherCounter))
+    
+    def __ge__(self, otherCounter) -> bool:
+        print("Magic method __ge__ is called")
+        return (self.__gt__(otherCounter) or self.__eq__(otherCounter))
+    
+    def __le__(self, otherCounter) -> bool:
+        print("Magic method __le__ is called")
+        return (self.__lt__(otherCounter) or self.__eq__(otherCounter))
             
         
     val = property(
