@@ -29,6 +29,9 @@
 Author: Hana Bizhani
 Date: 06/10/2022
 """
+from itertools import count
+
+
 class Counter:
     def __init__(self, v: int=0, i: int=1) -> None:
         self._val = v
@@ -56,7 +59,7 @@ class Counter:
     
     def __repr__(self) -> str:
         print("Magic method __rep__ is called")
-        return str(self._val)
+        return "Counter value is: " + str(self._val) + " and Increment value is: " + str(self._incr)
     
     def _set_incr(self, i):
         print("Set increment Value with ", i)
@@ -115,8 +118,13 @@ class Counter:
     def __le__(self, otherCounter) -> bool:
         print("Magic method __le__ is called")
         return (self.__lt__(otherCounter) or self.__eq__(otherCounter))
-            
+    
+    def resetCounter(self, v: int=0, i: int=1):
+        self._val = v
+        self._incr = i 
+        return self 
         
+            
     val = property(
         fget=_get_val,
         fset=_set_val,
