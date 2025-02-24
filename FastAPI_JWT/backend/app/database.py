@@ -1,3 +1,10 @@
+"""
+Developer: Hana Bizhani
+Date: 2025-02-21
+Change Log:
+- Initial creation of the file.
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
