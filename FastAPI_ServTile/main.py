@@ -117,7 +117,9 @@ def read_tile_from_mbtiles(mbtiles_path: str, zoom: int, column: int, row: int) 
             raise HTTPException(status_code=404, detail="Tile data not found")
         return tile_data
 
-@app.get('/serv/<int:zoom>/<int:column>/<int:row>.pbf', response_class=Response)
+
+
+@app.get('/serv/{zoom}/{column}/{row}.pbf', response_class=Response)
 async def serve_tile(zoom: int, column: int, row: int) -> Response:
     """
     Serve a vector tile in Protocol Buffers (PBF) format from the 'data/roads.mbtiles' file.
@@ -131,9 +133,11 @@ async def serve_tile(zoom: int, column: int, row: int) -> Response:
     - Binary tile data in PBF format.
     - HTTP 404 if the tile is not found.
     """
-    # column, row = xyz_to_tms(zoom, column, row)
-    print(column)
-    print(row)
+    # print("column from mapbox=", column)
+    # print("row from mapbox=", row)
+    column, row = xyz_to_tms(zoom, column, row)
+    # print("column after calling xyz_to_tms()=", column)
+    # print("row after calling xyz_to_tms()=", row)
     tile_data = read_tile_from_mbtiles("data/roads.mbtiles", zoom, column, row)
     # tile_data = read_tile_from_mbtiles("mbtiles/tiles.mbtiles", zoom, column, row)
     return Response(content=tile_data, media_type='application/x-protobuf', headers=TILE_RESPONSE_HEADERS)
