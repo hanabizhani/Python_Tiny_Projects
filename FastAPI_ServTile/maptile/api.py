@@ -8,6 +8,9 @@ Change Log:
 
 from fastapi import APIRouter, HTTPException, Response
 import pymbtiles
+# import json
+# from mapbox_vector_tile import encode
+# import sqlite3
 
 router = APIRouter()
 
@@ -19,7 +22,7 @@ TILE_RESPONSE_HEADERS = {
     'Content-Type': 'application/x-protobuf',
 }
 
-async def xyz_to_tms(zoom: int, xtile: int, ytile_xyz: int) -> tuple[int, int]:
+def xyz_to_tms(zoom: int, xtile: int, ytile_xyz: int) -> tuple[int, int]:
     """
     Convert XYZ tile coordinates to TMS tile coordinates.
 
@@ -52,31 +55,39 @@ def read_tile_from_mbtiles(mbtiles_path: str, zoom: int, column: int, row: int) 
     - HTTPException: If the tile data is not found.
     """
     with pymbtiles.MBtiles(mbtiles_path) as src:
+        print("test")
         tile_data = src.read_tile(zoom, column, row)
         if tile_data is None:
             raise HTTPException(status_code=404, detail="Tile data not found")
         return tile_data
 
-@router.post('/serv/<int:zoom>/<int:column>/<int:row>.pbf', response_class=Response)
-def serve_tile(zoom: int, column: int, row: int) -> Response:
-    """
-    Serve a vector tile in Protocol Buffers (PBF) format from the 'netsanj.mbtiles' file.
+# @router.post('/serv/<int:zoom>/<int:column>/<int:row>.pbf', response_class=Response)
+# def serve_tile(zoom: int, column: int, row: int) -> Response:
+#     """
+#     Serve a vector tile in Protocol Buffers (PBF) format from the 'netsanj.mbtiles' file.
 
-    Parameters:
-    - zoom: Zoom level of the tile.
-    - column: Column (x-coordinate) of the tile.
-    - row: Row (y-coordinate) of the tile.
+#     Parameters:
+#     - zoom: Zoom level of the tile.
+#     - column: Column (x-coordinate) of the tile.
+#     - row: Row (y-coordinate) of the tile.
 
-    Returns:
-    - Binary tile data in PBF format.
-    - HTTP 404 if the tile is not found.
-    """
-    column, row = xyz_to_tms(zoom, column, row)
-    tile_data = read_tile_from_mbtiles("data/netsanj.mbtiles", zoom, column, row)
-    return Response(content=tile_data, media_type='application/x-protobuf', headers=TILE_RESPONSE_HEADERS)
+#     Returns:
+#     - Binary tile data in PBF format.
+#     - HTTP 404 if the tile is not found.
+#     """
+#     column, row = xyz_to_tms(zoom, column, row)
+#     print(column)
+#     print(row)
+#     tile_data = read_tile_from_mbtiles("data/shp_joined.mbtiles", zoom, column, row)
+#     # tile_data = read_tile_from_mbtiles("mbtiles/tiles.mbtiles", zoom, column, row)
+#     return Response(content=tile_data, media_type='application/x-protobuf', headers=TILE_RESPONSE_HEADERS)
 
-@router.post('/ecno/<int:zoom>/<int:column>/<int:row>.pbf', response_class=Response)
-def ecno_tile(zoom: int, column: int, row: int) -> Response:
+# @router.post("/")
+# def root():
+#     return {"message": "Hello World"}
+
+# @router.post('/ecno/<int:zoom>/<int:column>/<int:row>.pbf', response_class=Response)
+# def ecno_tile(zoom: int, column: int, row: int) -> Response:
     """
     Serve a vector tile in Protocol Buffers (PBF) format from the 'output (2).mbtiles' file.
 
@@ -92,3 +103,19 @@ def ecno_tile(zoom: int, column: int, row: int) -> Response:
     column, row = xyz_to_tms(zoom, column, row)
     tile_data = read_tile_from_mbtiles("data/ecno_tile.mbtiles", zoom, column, row)
     return Response(content=tile_data, media_type='application/x-protobuf', headers=TILE_RESPONSE_HEADERS)
+
+# @router.post('/converGeoJsonToMbtile')
+# def converGeoJsonToMbtile():
+#     # Load GeoJSON
+#     with open("roads/roads.geojson", "r") as f:
+#         geojson = json.load(f)
+#
+#     # Convert to vector tiles
+#     tiles = encode(geojson)
+#
+#     # Save to MBTiles
+#     with MBTiles("mbtiles", "w") as mbtiles:
+#         for tile in tiles:
+#             mbtiles.write_tile(tile["z"], tile["x"], tile["y"], tile["data"])
+#
+#     return "SUCCESS"
